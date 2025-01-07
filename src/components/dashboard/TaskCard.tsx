@@ -70,6 +70,33 @@ export const TaskCard: React.FC<TaskCardProps> = ({
         >
           Delete
         </button>
+        {/* status update buttons  */}
+        <div className="mt-2 space-x-2">
+          {task.status !== "todo" && (
+            <button
+              onClick={() => updateStatus(task.id, "todo")}
+              className="bg-gray-500 text-white px-2 py-1 rounded text-sm"
+            >
+              Move to todo
+            </button>
+          )}
+          {task.status !== "inProgress" && (
+            <button
+              onClick={() => updateStatus(task.id, "inProgress")}
+              className="bg-gray-500 text-white px-2 py-1 rounded text-sm"
+            >
+              Move to In Progress
+            </button>
+          )}
+          {task.status !== "completed" && (
+            <button
+              onClick={() => updateStatus(task.id, "completed")}
+              className="bg-gray-500 text-white px-2 py-1 rounded text-sm"
+            >
+              Move to Completed
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
