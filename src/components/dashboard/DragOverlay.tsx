@@ -1,5 +1,5 @@
 import { Task } from "@/types/types";
-import { formatDate } from "@/utils/utils";
+import { formatDate } from "@/utils/taskInfo";
 import React from "react";
 
 interface DragOverlayProps {

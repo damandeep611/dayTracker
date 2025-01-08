@@ -1,5 +1,5 @@
 import { ColumnType, Task } from "@/types/types";
-import { calculateTimeTaken, formatDate } from "@/utils/utils";
+import { calculateTimeTaken, formatDate } from "@/utils/taskInfo";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { GripVertical } from "lucide-react";
