@@ -7,12 +7,13 @@ import {
   DragStartEvent,
 } from "@dnd-kit/core";
 import { arrayMove, SortableContext } from "@dnd-kit/sortable";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { ColumnContainer } from "./ColumnContainer";
 import { TaskCard } from "./TaskCard";
 import AddTaskForm from "./TaskForm";
 import { restrictToWindowEdges } from "@dnd-kit/modifiers";
 import { DragOverlay as CustomDragOverlay } from "./DragOverlay";
+import { localStorageService } from "@/services/LocalStorage";
 
 const columns: Column[] = [
   { id: "todo", title: "To Do" },
@@ -25,37 +26,48 @@ export const KanbanBoard: React.FC = () => {
   const [showProgressModal, setShowProgressModal] = useState(false);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
 
+  // load tasks from local storage on component mount
+  useEffect(() => {
+    const storedTasks = localStorageService.getTasks();
+    setTasks(storedTasks);
+  }, []);
+
+  // handler for adding new tasks
   const addTask = (content: string) => {
-    const newTask: Task = {
-      id: Date.now().toString(),
-      content,
-      createdAt: new Date(),
-      status: "todo",
-    };
+    const newTask = localStorageService.addTask(content);
     setTasks([...tasks, newTask]);
   };
 
   const deleteTask = (id: string) => {
+    localStorageService.deleteTask(id);
     setTasks(tasks.filter((task) => task.id !== id));
   };
 
   const updateTaskStatus = useCallback((id: string, status: ColumnType) => {
-    setTasks((prevTasks) =>
-      prevTasks.map((task) => {
-        if (task.id === id) {
-          const updatedTask = { ...task, status };
-          if (status === "inProgress" && !task.startedAt) {
-            updatedTask.startedAt = new Date();
-            setShowProgressModal(true);
-            setTimeout(() => setShowProgressModal(false), 1000);
-          } else if (status === "completed" && !task.completedAt) {
-            updatedTask.completedAt = new Date();
+    const updatedTask = localStorageService.updateTask(id, {
+      status,
+      ...(status === "inProgress" && { startedAt: new Date() }),
+      ...(status === "completed" && { completedAt: new Date() }),
+    });
+
+    if (updatedTask) {
+      setTasks((prevTasks) =>
+        prevTasks.map((task) => {
+          if (task.id === id) {
+            const updatedTask = { ...task, status };
+            if (status === "inProgress" && !task.startedAt) {
+              updatedTask.startedAt = new Date();
+              setShowProgressModal(true);
+              setTimeout(() => setShowProgressModal(false), 1000);
+            } else if (status === "completed" && !task.completedAt) {
+              updatedTask.completedAt = new Date();
+            }
+            return updatedTask;
           }
-          return updatedTask;
-        }
-        return task;
-      })
-    );
+          return task;
+        })
+      );
+    }
   }, []);
 
   const onDragStart = (event: DragStartEvent) => {
@@ -77,11 +89,13 @@ export const KanbanBoard: React.FC = () => {
       updateTaskStatus(activeTask.id, overColumn);
     }
 
-    setTasks((tasks) => {
-      const oldIndex = tasks.findIndex((task) => task.id === active.id);
-      const newIndex = tasks.findIndex((task) => task.id === over.id);
-      return arrayMove(tasks, oldIndex, newIndex);
-    });
+    const updatedTasks = arrayMove(
+      tasks,
+      tasks.findIndex((task) => task.id === active.id),
+      tasks.findIndex((task) => task.id === over.id)
+    );
+    setTasks(updatedTasks);
+    localStorageService.saveTasks(updatedTasks);
   };
 
   const totalTasks = tasks.length;
