@@ -35,7 +35,7 @@ export const KanbanBoard: React.FC = () => {
   // handler for adding new tasks
   const addTask = (content: string) => {
     const newTask = localStorageService.addTask(content);
-    setTasks([...tasks, newTask]);
+    setTasks([...tasks, newTask]);  
   };
 
   const deleteTask = (id: string) => {
