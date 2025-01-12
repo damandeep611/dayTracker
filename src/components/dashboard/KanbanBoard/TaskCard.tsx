@@ -37,12 +37,12 @@ export const TaskCard: React.FC<TaskCardProps> = ({
     <div
       ref={setNodeRef}
       style={style}
-      className={`${cardClass} p-4 mb-2 rounded-lg shadow cursor-move`}
+      className={`${cardClass} p-4 mb-2 rounded-lg shadow-sm border border-gray-300 cursor-move`}
     >
       <div
         {...attributes}
         {...listeners}
-        className="cursor-move mr-2 text-gray-400 hover:text-gray-600"
+        className="cursor-move mr-2  text-gray-400 hover:text-gray-600"
       >
         <GripVertical size={20} />
       </div>

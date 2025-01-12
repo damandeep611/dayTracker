@@ -15,10 +15,7 @@ export const ColumnContainer: React.FC<ColumnContainerProps> = ({
     id: column.id,
   });
   return (
-    <div
-      ref={setNodeRef}
-      className="bg-gray-100 p-4 rounded-lg shadow-md flex-1"
-    >
+    <div ref={setNodeRef} className="bg-white p-4 rounded-lg  shadow-md flex-1">
       <h2 className="text-lg font-semibold mb-4">{column.title}</h2>
       {children}
     </div>

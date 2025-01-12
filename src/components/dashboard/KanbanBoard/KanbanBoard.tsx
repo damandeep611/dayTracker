@@ -104,7 +104,7 @@ export const KanbanBoard: React.FC = () => {
   ).length;
 
   return (
-    <div className="p-4">
+    <div className="p-2 ">
       <h1 className="text-2xl font-bold mb-4">Kanban Board</h1>
       <AddTaskForm onAddTask={addTask} />
       <div className="mb-4">
@@ -117,7 +117,7 @@ export const KanbanBoard: React.FC = () => {
         onDragEnd={onDragEnd}
         modifiers={[restrictToWindowEdges]}
       >
-        <div className="flex gap-4">
+        <div className="flex gap-4 bg-gray-200 p-4">
           {columns.map((column) => (
             <ColumnContainer key={column.id} column={column}>
               <SortableContext
