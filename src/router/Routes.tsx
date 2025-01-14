@@ -1,6 +1,7 @@
 import App from "@/App";
 import Dashboard from "@/components/dashboard/Dashboard";
 import DashboardHero from "@/components/dashboard/HomeSection/DashboardHero";
+import { KanbanBoard } from "@/components/dashboard/KanbanBoard/KanbanBoard";
 import LandingPage from "@/components/layout/LandingPage";
 import { createBrowserRouter } from "react-router";
 
@@ -13,7 +14,10 @@ const routes = [
   {
     path: "/dashboard",
     element: <Dashboard />,
-    children: [{ path: "/dashboard/home", element: <DashboardHero /> }],
+    children: [
+      { path: "/dashboard/", element: <DashboardHero /> },
+      { path: "/dashboard/kanban", element: <KanbanBoard /> },
+    ],
   },
 ];
 

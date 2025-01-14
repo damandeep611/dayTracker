@@ -14,6 +14,8 @@ import AddTaskForm from "./TaskForm";
 import { restrictToWindowEdges } from "@dnd-kit/modifiers";
 import { DragOverlay as CustomDragOverlay } from "./DragOverlay";
 import { localStorageService } from "@/services/LocalStorage";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 const columns: Column[] = [
   { id: "todo", title: "To Do" },
@@ -35,7 +37,7 @@ export const KanbanBoard: React.FC = () => {
   // handler for adding new tasks
   const addTask = (content: string) => {
     const newTask = localStorageService.addTask(content);
-    setTasks([...tasks, newTask]);  
+    setTasks([...tasks, newTask]);
   };
 
   const deleteTask = (id: string) => {
@@ -104,50 +106,52 @@ export const KanbanBoard: React.FC = () => {
   ).length;
 
   return (
-    <div className="p-2 ">
-      <h1 className="text-2xl font-bold mb-4">Kanban Board</h1>
-      <AddTaskForm onAddTask={addTask} />
-      <div className="mb-4">
-        <p>Total Tasks: {totalTasks}</p>
-        <p>Completed Tasks: {completedTasks}</p>
-      </div>
-      <DndContext
-        collisionDetection={closestCorners}
-        onDragStart={onDragStart}
-        onDragEnd={onDragEnd}
-        modifiers={[restrictToWindowEdges]}
-      >
-        <div className="flex gap-4 bg-gray-200 p-4">
-          {columns.map((column) => (
-            <ColumnContainer key={column.id} column={column}>
-              <SortableContext
-                items={tasks.filter((task) => task.status === column.id)}
-              >
-                {tasks
-                  .filter((task) => task.status === column.id)
-                  .map((task) => (
-                    <TaskCard
-                      key={task.id}
-                      task={task}
-                      onDelete={deleteTask}
-                      updateStatus={updateTaskStatus}
-                    />
-                  ))}
-              </SortableContext>
-            </ColumnContainer>
-          ))}
+    <DndProvider backend={HTML5Backend}>
+      <div className="p-2 ">
+        <h1 className="text-2xl font-bold mb-4">Kanban Board</h1>
+        <AddTaskForm onAddTask={addTask} />
+        <div className="mb-4">
+          <p>Total Tasks: {totalTasks}</p>
+          <p>Completed Tasks: {completedTasks}</p>
         </div>
-        <DragOverlay>
-          {activeTask && <CustomDragOverlay task={activeTask} />}
-        </DragOverlay>
-      </DndContext>
-      {showProgressModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-4 rounded-lg shadow-lg">
-            <p className="text-lg font-semibold">Task in Progress</p>
+        <DndContext
+          collisionDetection={closestCorners}
+          onDragStart={onDragStart}
+          onDragEnd={onDragEnd}
+          modifiers={[restrictToWindowEdges]}
+        >
+          <div className="flex gap-4 bg-gray-200 p-4">
+            {columns.map((column) => (
+              <ColumnContainer key={column.id} column={column}>
+                <SortableContext
+                  items={tasks.filter((task) => task.status === column.id)}
+                >
+                  {tasks
+                    .filter((task) => task.status === column.id)
+                    .map((task) => (
+                      <TaskCard
+                        key={task.id}
+                        task={task}
+                        onDelete={deleteTask}
+                        updateStatus={updateTaskStatus}
+                      />
+                    ))}
+                </SortableContext>
+              </ColumnContainer>
+            ))}
           </div>
-        </div>
-      )}
-    </div>
+          <DragOverlay>
+            {activeTask && <CustomDragOverlay task={activeTask} />}
+          </DragOverlay>
+        </DndContext>
+        {showProgressModal && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="bg-white p-4 rounded-lg shadow-lg">
+              <p className="text-lg font-semibold">Task in Progress</p>
+            </div>
+          </div>
+        )}
+      </div>
+    </DndProvider>
   );
 };

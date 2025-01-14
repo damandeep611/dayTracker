@@ -45,10 +45,10 @@ const sidebarNavigation = {
       path: "/dashboard",
     },
     {
-      id: "campaigns",
-      title: "Campaigns",
+      id: "kanban",
+      title: "Kanban Board",
       icon: BuildingOfficeIcon,
-      path: "/campaigns ",
+      path: "/dashboard/kanban",
     },
     { id: "chat", title: "Chat", icon: ChatBubbleLeftIcon, path: "/chat" },
     {
