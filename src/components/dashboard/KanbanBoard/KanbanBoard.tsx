@@ -107,12 +107,23 @@ export const KanbanBoard: React.FC = () => {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className="p-2 ">
-        <h1 className="text-2xl font-bold mb-4">Kanban Board</h1>
-        <AddTaskForm onAddTask={addTask} />
-        <div className="mb-4">
-          <p>Total Tasks: {totalTasks}</p>
-          <p>Completed Tasks: {completedTasks}</p>
+      {/* kanban board container */}
+      <div className="p-6 ">
+        <div>
+          <h1 className="text-2xl font-bold mb-4">Tracker Board</h1>
+        </div>
+        <div>
+          <AddTaskForm onAddTask={addTask} />
+        </div>
+
+        <div className="mb-4 flex">
+          <div className="border border-gray-500 p-6">
+            <p className="text-sm font-medium">Total </p>
+            <span className="text-xl font-bold">{totalTasks}</span>
+          </div>
+          <div className="border border-gray-500 p-6">
+            <p>Completed Tasks: {completedTasks}</p>
+          </div>
         </div>
         <DndContext
           collisionDetection={closestCorners}
@@ -120,7 +131,7 @@ export const KanbanBoard: React.FC = () => {
           onDragEnd={onDragEnd}
           modifiers={[restrictToWindowEdges]}
         >
-          <div className="flex gap-4 bg-gray-200 p-4">
+          <div className="flex gap-4 bg-gray-100 p-4">
             {columns.map((column) => (
               <ColumnContainer key={column.id} column={column}>
                 <SortableContext

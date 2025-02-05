@@ -41,7 +41,7 @@ export default function Timer({ onTimeUpdate, onStop }: TimerProps) {
     setSeconds(0);
   };
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-6">
+    <div className="bg-white dark:bg-gray-800 dark:text-white rounded-xl border border-gray-200 p-6">
       <div className="text-4xl font-mono text-center mb-4">
         {formatTime(seconds)}
       </div>
