@@ -4,6 +4,7 @@ export interface Skill {
   category: string;
   targetHours: number;
   currentHours: number;
+  trend: number;
   color: string;
 }
 

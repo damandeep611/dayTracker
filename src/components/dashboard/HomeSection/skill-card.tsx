@@ -93,7 +93,6 @@ export default function SkillCard({
           ) : trend < 0 ? (
             <ChevronDownIcon className="w-4 h-4" />
           ) : null}
-          <span>{Math.abs(trend)}%</span>
         </div>
       </div>
 
